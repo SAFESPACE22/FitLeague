@@ -20,6 +20,7 @@ const Particle = ({ delay, duration, startX }) => {
     const scale = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
+
         setTimeout(() => {
             Animated.parallel([
                 Animated.timing(translateY, {
@@ -118,8 +119,7 @@ export default function CompletionScreen({ route, navigation }) {
     async function playSound() {
         try {
             const { sound } = await Audio.Sound.createAsync(
-                // Using a simple success sound - in production, you'd add a custom sound file
-                { uri: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3' },
+                require('../assets/sounds/success.mp3'),
                 { shouldPlay: true }
             );
             setSound(sound);
@@ -170,48 +170,51 @@ export default function CompletionScreen({ route, navigation }) {
                     </Text>
                 </Animated.View>
 
-                <View style={styles.summaryContainer}>
-                    <LinearGradient
-                        colors={['rgba(139, 92, 246, 0.4)', 'rgba(124, 58, 237, 0.4)']}
-                        style={styles.summaryCard}
-                    >
-                        <Text style={styles.summaryTitle}>Your Profile</Text>
+                {/* <View style={styles.summaryContainer}>
+    <LinearGradient
+        colors={['rgba(139, 92, 246, 0.4)', 'rgba(124, 58, 237, 0.4)']}
+        style={styles.summaryCard}
+    >
+        <Text style={styles.summaryTitle}>Your Profile</Text>
 
-                        <View style={styles.summaryRow}>
-                            <Text style={styles.summaryLabel}>Archetype:</Text>
-                            <Text style={styles.summaryValue}>
-                                {archetype === 'runner' ? '🏃 Runner' : archetype === 'lifter' ? '🏋️ Lifter' : '⚡ Hybrid'}
-                            </Text>
-                        </View>
+        <View style={styles.summaryRow}>
+            <Text style={styles.summaryLabel}>Archetype:</Text>
+            <Text style={styles.summaryValue}>
+                {archetype === 'runner' ? '🏃 Runner' : archetype === 'lifter' ? '🏋️ Lifter' : '⚡ Hybrid'}
+            </Text>
+        </View>
 
-                        <View style={styles.summaryRow}>
-                            <Text style={styles.summaryLabel}>Skill Level:</Text>
-                            <Text style={styles.summaryValue}>{skillLevel || 'Intermediate'}</Text>
-                        </View>
+        <View style={styles.summaryRow}>
+            <Text style={styles.summaryLabel}>Skill Level:</Text>
+            <Text style={styles.summaryValue}>{skillLevel || 'Intermediate'}</Text>
+        </View>
 
-                        <View style={styles.summaryRow}>
-                            <Text style={styles.summaryLabel}>XP Multiplier:</Text>
-                            <Text style={styles.summaryValueHighlight}>
-                                {xpMultiplier || 1.5}x
-                            </Text>
-                        </View>
+        <View style={styles.summaryRow}>
+            <Text style={styles.summaryLabel}>XP Multiplier:</Text>
+            <Text style={styles.summaryValueHighlight}>
+                {xpMultiplier || 1.5}x
+            </Text>
+        </View>
 
-                        {team && (
-                            <View style={styles.summaryRow}>
-                                <Text style={styles.summaryLabel}>Team:</Text>
-                                <Text style={styles.summaryValue}>{team}</Text>
-                            </View>
-                        )}
-                    </LinearGradient>
-                </View>
+        {team && (
+            <View style={styles.summaryRow}>
+                <Text style={styles.summaryLabel}>Team:</Text>
+                <Text style={styles.summaryValue}>{team}</Text>
+            </View>
+        )}
+    </LinearGradient>
+</View> 
+*/}
 
                 <View style={styles.xpBadgeContainer}>
                     <LinearGradient
                         colors={['#fbbf24', '#f59e0b']}
                         style={styles.xpBadge}
                     >
-                        <Text style={styles.xpBadgeText}>+500 XP</Text>
-                        <Text style={styles.xpBadgeSubtext}>Welcome Bonus!</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('MainApp')}>
+                            <Text style={styles.xpBadgeText}>+500 XP</Text>
+                            <Text style={styles.xpBadgeSubtext}>Welcome Bonus!</Text>
+                        </TouchableOpacity>
                     </LinearGradient>
                 </View>
 
@@ -219,20 +222,6 @@ export default function CompletionScreen({ route, navigation }) {
                     Get ready to compete, level up, and achieve your goals! 💪
                 </Text>
 
-                <TouchableOpacity
-                    style={styles.continueButton}
-                    onPress={() => navigation.navigate('HomeFeed')}
-                    activeOpacity={0.8}
-                >
-                    <LinearGradient
-                        colors={['#667eea', '#764ba2']}
-                        style={styles.continueButtonGradient}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 0 }}
-                    >
-                        <Text style={styles.continueButtonText}>Explore Feed →</Text>
-                    </LinearGradient>
-                </TouchableOpacity>
             </View>
         </LinearGradient>
     );

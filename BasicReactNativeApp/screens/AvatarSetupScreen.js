@@ -15,8 +15,8 @@ const { width } = Dimensions.get('window');
 const ARCHETYPES = [
     {
         id: 'runner',
+        emoji: '👟',
         name: 'Runner',
-        emoji: '🏃',
         description: 'Speed & Endurance',
         details: 'Focus on cardio, stamina, and long-distance performance',
         color: ['#3b82f6', '#06b6d4'],
@@ -24,7 +24,6 @@ const ARCHETYPES = [
     {
         id: 'lifter',
         name: 'Lifter',
-        emoji: '🏋️',
         description: 'Strength & Power',
         details: 'Build muscle, increase strength, and dominate the weights',
         color: ['#ef4444', '#f97316'],
@@ -32,7 +31,6 @@ const ARCHETYPES = [
     {
         id: 'hybrid',
         name: 'Hybrid',
-        emoji: '⚡',
         description: 'Balanced All-Around',
         details: 'Master both strength and cardio for complete fitness',
         color: ['#a855f7', '#ec4899'],
@@ -84,10 +82,6 @@ export default function AvatarSetupScreen({ navigation }) {
                 showsVerticalScrollIndicator={false}
             >
                 <View style={styles.header}>
-                    <Text style={styles.title}>Choose Your Path</Text>
-                    <Text style={styles.subtitle}>
-                        Select the archetype that matches your fitness goals
-                    </Text>
                 </View>
 
                 <View style={styles.archetypesContainer}>
@@ -198,7 +192,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     archetypeCard: {
-        padding: 30,
+        padding: 50,
         borderRadius: 25,
         alignItems: 'center',
         shadowColor: '#000',

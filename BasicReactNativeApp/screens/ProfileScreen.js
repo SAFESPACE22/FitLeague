@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import {
     View,
     Text,
@@ -6,6 +6,8 @@ import {
     ScrollView,
     Dimensions,
     Animated,
+    Modal,
+    TouchableOpacity,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
@@ -67,8 +69,9 @@ const generateHeatmapData = () => {
 
 const HEATMAP_DATA = generateHeatmapData();
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ navigation }) {
     const glowAnim = useRef(new Animated.Value(1)).current;
+    const [settingsVisible, setSettingsVisible] = useState(false);
 
     useEffect(() => {
         Animated.loop(
@@ -87,9 +90,56 @@ export default function ProfileScreen() {
         ).start();
     }, []);
 
+    const handleLogout = () => {
+        setSettingsVisible(false);
+        // Navigate to onboarding
+        navigation.getParent()?.navigate('Onboarding');
+    };
+
     return (
         <View style={styles.container}>
             <StatusBar style="light" />
+
+            {/* Settings Icon */}
+            <TouchableOpacity
+                style={styles.settingsButton}
+                onPress={() => setSettingsVisible(true)}
+            >
+                <Text style={styles.settingsIcon}>⚙️</Text>
+            </TouchableOpacity>
+
+            {/* Settings Modal */}
+            <Modal
+                visible={settingsVisible}
+                transparent={true}
+                animationType="fade"
+                onRequestClose={() => setSettingsVisible(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>⚙️ Settings</Text>
+
+                        <TouchableOpacity
+                            style={styles.logoutButton}
+                            onPress={handleLogout}
+                        >
+                            <LinearGradient
+                                colors={['#ef4444', '#dc2626']}
+                                style={styles.logoutGradient}
+                            >
+                                <Text style={styles.logoutText}>🚪 Logout</Text>
+                            </LinearGradient>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.cancelButton}
+                            onPress={() => setSettingsVisible(false)}
+                        >
+                            <Text style={styles.cancelText}>Cancel</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
 
             {/* Header Background */}
             <LinearGradient
@@ -508,5 +558,70 @@ const styles = StyleSheet.create({
     timelineDate: {
         fontSize: 13,
         color: '#64748b',
+    },
+
+    // Settings
+    settingsButton: {
+        position: 'absolute',
+        top: 50,
+        right: 20,
+        width: 44,
+        height: 44,
+        borderRadius: 22,
+        backgroundColor: 'rgba(30, 41, 59, 0.8)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 10,
+        borderWidth: 1,
+        borderColor: '#334155',
+    },
+    settingsIcon: {
+        fontSize: 22,
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContent: {
+        backgroundColor: '#1e293b',
+        borderRadius: 20,
+        padding: 30,
+        width: width - 60,
+        borderWidth: 2,
+        borderColor: '#334155',
+    },
+    modalTitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#ffffff',
+        marginBottom: 30,
+        textAlign: 'center',
+    },
+    logoutButton: {
+        borderRadius: 15,
+        overflow: 'hidden',
+        marginBottom: 15,
+    },
+    logoutGradient: {
+        paddingVertical: 16,
+        alignItems: 'center',
+    },
+    logoutText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#ffffff',
+    },
+    cancelButton: {
+        paddingVertical: 16,
+        alignItems: 'center',
+        backgroundColor: '#334155',
+        borderRadius: 15,
+    },
+    cancelText: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#ffffff',
     },
 });

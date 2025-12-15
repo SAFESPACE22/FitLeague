@@ -36,7 +36,7 @@ const FEED_DATA = [
         user: { name: 'Alex Rivera', avatar: '🏃', team: 'Cardio Kings' },
         workoutType: '5K Morning Run',
         isPR: true,
-        stats: { distance: '5.2 km', time: '24:32', pace: '4:43/km', calories: 420 },
+        stats: { distance: '5.2 km', time: '24:32', pace: '4:43/km' },
         xp: 540,
         reactions: { fire: 23, flex: 12, comments: 8 },
         timestamp: '2 hours ago',
@@ -46,7 +46,7 @@ const FEED_DATA = [
         user: { name: 'Sarah Chen', avatar: '🏋️', team: 'Iron Warriors' },
         workoutType: 'Deadlift Session',
         isLevelUp: true,
-        stats: { sets: 5, reps: 80, weight: '315 lbs', time: '45 min' },
+        stats: { reps: 80, weight: '315 lbs', time: '45 min' },
         xp: 725,
         reactions: { fire: 45, flex: 34, comments: 15 },
         timestamp: '4 hours ago',
@@ -56,7 +56,7 @@ const FEED_DATA = [
         user: { name: 'Mike Johnson', avatar: '🚴', team: 'Hybrid Heroes' },
         workoutType: 'Cycling + Strength',
         isPR: false,
-        stats: { distance: '25 km', time: '1:12:00', sets: 3, calories: 680 },
+        stats: { distance: '25 km', time: '1:12:00', sets: 3 },
         xp: 890,
         reactions: { fire: 18, flex: 9, comments: 5 },
         timestamp: '6 hours ago',
@@ -66,7 +66,7 @@ const FEED_DATA = [
         user: { name: 'Emma Davis', avatar: '🤸', team: 'Morning Crew' },
         workoutType: 'HIIT Circuit',
         isPR: false,
-        stats: { rounds: 6, time: '30 min', exercises: 12, calories: 385 },
+        stats: { rounds: 6, time: '30 min', exercises: 12 },
         xp: 620,
         reactions: { fire: 31, flex: 22, comments: 11 },
         timestamp: '8 hours ago',
@@ -256,8 +256,8 @@ const WorkoutCard = ({ post, selectedReactions, onReactionPress }) => {
                     </View>
                 ))}
             </View>
-
-            {/* XP Badge */}
+            {/*
+            {/* XP Badge 
             <View style={styles.xpBadgeContainer}>
                 <LinearGradient
                     colors={['#4ade80', '#22c55e', '#16a34a']}
@@ -269,7 +269,7 @@ const WorkoutCard = ({ post, selectedReactions, onReactionPress }) => {
                     <Text style={styles.xpBadgeText}>+{post.xp} XP</Text>
                 </LinearGradient>
             </View>
-
+            */}
             {/* Reactions */}
             <View style={styles.reactionsContainer}>
                 <View style={styles.reactionButtons}>

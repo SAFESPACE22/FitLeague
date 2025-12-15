@@ -145,14 +145,7 @@ export default function TeamHubScreen() {
                         ⚔️ Arena
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                    style={[styles.tab, activeTab === 'roster' && styles.tabActive]}
-                    onPress={() => setActiveTab('roster')}
-                >
-                    <Text style={[styles.tabText, activeTab === 'roster' && styles.tabTextActive]}>
-                        👥 Roster
-                    </Text>
-                </TouchableOpacity>
+
                 <TouchableOpacity
                     style={[styles.tab, activeTab === 'chat' && styles.tabActive]}
                     onPress={() => setActiveTab('chat')}
@@ -176,12 +169,11 @@ export default function TeamHubScreen() {
                         tickerAnim={tickerAnim}
                         xpBoostActive={xpBoostActive}
                         onActivateBoost={activateXPBoost}
+                        roster={ROSTER}
                     />
                 )}
 
-                {activeTab === 'roster' && (
-                    <RosterTab roster={ROSTER} />
-                )}
+
 
                 {activeTab === 'chat' && (
                     <ChatTab messages={CHAT_MESSAGES} />
@@ -192,7 +184,9 @@ export default function TeamHubScreen() {
 }
 
 // Arena Tab Component
-const ArenaTab = ({ teamData, rivalTeam, teamPercentage, progressAnim, daysUntilSunday, liveActivities, tickerAnim, xpBoostActive, onActivateBoost }) => {
+
+const ArenaTab = ({ teamData, rivalTeam, teamPercentage, progressAnim, daysUntilSunday, liveActivities, tickerAnim, xpBoostActive, onActivateBoost, roster }) => {
+    const [showRoster, setShowRoster] = useState(false);
     const progressWidth = progressAnim.interpolate({
         inputRange: [0, 100],
         outputRange: ['0%', '100%'],
@@ -201,68 +195,60 @@ const ArenaTab = ({ teamData, rivalTeam, teamPercentage, progressAnim, daysUntil
     return (
         <View style={styles.arenaContainer}>
             {/* Battle Arena */}
-            <View style={styles.battleCard}>
-                <Text style={styles.battleTitle}>⚔️ Weekly Battle Arena</Text>
-                <Text style={styles.battleSubtitle}>Ends in {daysUntilSunday} days</Text>
-
-                <View style={styles.vsContainer}>
-                    <View style={styles.teamInfo}>
-                        <Text style={styles.vsTeamEmoji}>{teamData.emoji}</Text>
-                        <Text style={styles.vsTeamName}>{teamData.name}</Text>
-                    </View>
-                    <Text style={styles.vsText}>VS</Text>
-                    <View style={styles.teamInfo}>
-                        <Text style={styles.vsTeamEmoji}>{rivalTeam.emoji}</Text>
-                        <Text style={styles.vsTeamName}>{rivalTeam.name}</Text>
-                    </View>
-                </View>
-
-                {/* Tug of War Bar */}
-                <View style={styles.tugOfWarContainer}>
-                    <View style={styles.tugOfWarBar}>
-                        <Animated.View style={[styles.tugOfWarProgress, { width: progressWidth }]}>
-                            <LinearGradient
-                                colors={['#8b5cf6', '#a78bfa']}
-                                style={styles.tugOfWarGradient}
-                                start={{ x: 0, y: 0 }}
-                                end={{ x: 1, y: 0 }}
-                            />
-                        </Animated.View>
-                    </View>
-
-                    <View style={styles.tugOfWarScores}>
-                        <Text style={styles.xpScore}>{teamData.weeklyXP.toLocaleString()} XP</Text>
-                        <Text style={styles.xpScore}>{rivalTeam.weeklyXP.toLocaleString()} XP</Text>
-                    </View>
-                </View>
-
-                <View style={styles.leadContainer}>
-                    <Text style={styles.leadText}>
-                        {teamData.weeklyXP > rivalTeam.weeklyXP ? '🎉 You\'re Leading!' : '⚡ Time to Push!'}
+            <TouchableOpacity
+                activeOpacity={0.9}
+                onPress={() => setShowRoster(!showRoster)}
+            >
+                <View style={styles.battleCard}>
+                    <Text style={styles.battleTitle}>
+                        ⚔️ Weekly Battle Arena {showRoster ? '▲' : '▼'}
                     </Text>
-                    <Text style={styles.leadAmount}>
-                        {Math.abs(teamData.weeklyXP - rivalTeam.weeklyXP).toLocaleString()} XP difference
+                    <Text style={styles.battleSubtitle}>
+                        Ends in {daysUntilSunday} days • Tap to {showRoster ? 'hide' : 'view'} leaderboard
                     </Text>
-                </View>
-            </View>
 
-            {/* Team Stats */}
-            <View style={styles.statsCard}>
-                <View style={styles.statItem}>
-                    <Text style={styles.statValue}>{teamData.level}</Text>
-                    <Text style={styles.statLabel}>Team Level</Text>
+                    <View style={styles.vsContainer}>
+                        <View style={styles.teamInfo}>
+                            <Text style={styles.vsTeamEmoji}>{teamData.emoji}</Text>
+                            <Text style={styles.vsTeamName}>{teamData.name}</Text>
+                        </View>
+                        <Text style={styles.vsText}>VS</Text>
+                        <View style={styles.teamInfo}>
+                            <Text style={styles.vsTeamEmoji}>{rivalTeam.emoji}</Text>
+                            <Text style={styles.vsTeamName}>{rivalTeam.name}</Text>
+                        </View>
+                    </View>
+
+                    {/* Tug of War Bar */}
+                    <View style={styles.tugOfWarContainer}>
+                        <View style={styles.tugOfWarBar}>
+                            <Animated.View style={[styles.tugOfWarProgress, { width: progressWidth }]}>
+                                <LinearGradient
+                                    colors={['#8b5cf6', '#a78bfa']}
+                                    style={styles.tugOfWarGradient}
+                                    start={{ x: 0, y: 0 }}
+                                    end={{ x: 1, y: 0 }}
+                                />
+                            </Animated.View>
+                        </View>
+
+                        <View style={styles.tugOfWarScores}>
+                            <Text style={styles.xpScore}>{teamData.weeklyXP.toLocaleString()} XP</Text>
+                            <Text style={styles.xpScore}>{rivalTeam.weeklyXP.toLocaleString()} XP</Text>
+                        </View>
+                    </View>
+
+                    <View style={styles.leadContainer}>
+                        <Text style={styles.leadText}>
+                            {teamData.weeklyXP > rivalTeam.weeklyXP ? '🎉 You\'re Leading!' : '⚡ Time to Push!'}
+                        </Text>
+                        <Text style={styles.leadAmount}>
+                            {Math.abs(teamData.weeklyXP - rivalTeam.weeklyXP).toLocaleString()} XP difference
+                        </Text>
+                    </View>
                 </View>
-                <View style={styles.statDivider} />
-                <View style={styles.statItem}>
-                    <Text style={styles.statValue}>#{teamData.standing}</Text>
-                    <Text style={styles.statLabel}>Standing</Text>
-                </View>
-                <View style={styles.statDivider} />
-                <View style={styles.statItem}>
-                    <Text style={styles.statValue}>{teamData.currentStreak} 🔥</Text>
-                    <Text style={styles.statLabel}>Day Streak</Text>
-                </View>
-            </View>
+            </TouchableOpacity>
+
 
             {/* Live Ticker */}
             <View style={styles.tickerCard}>
@@ -310,6 +296,9 @@ const ArenaTab = ({ teamData, rivalTeam, teamPercentage, progressAnim, daysUntil
                     </TouchableOpacity>
                 </View>
             </View>
+
+            {/* Roster Section */}
+            {showRoster && <RosterTab roster={roster} />}
         </View>
     );
 };
@@ -679,7 +668,7 @@ const styles = StyleSheet.create({
 
     // Roster Tab
     rosterContainer: {
-        padding: 15,
+        marginTop: 20,
     },
     rosterTitle: {
         fontSize: 20,

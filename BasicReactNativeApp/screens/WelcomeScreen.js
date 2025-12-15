@@ -7,6 +7,7 @@ import {
     Animated,
     Dimensions,
     ImageBackground,
+    StatusBar, // Import StatusBar to manage the status bar style
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -32,16 +33,16 @@ export default function WelcomeScreen({ navigation }) {
             }),
         ]).start();
 
-        // Continuous glow animation for tagline
+        // Continuous glow/pulse animation for tagline
         Animated.loop(
             Animated.sequence([
                 Animated.timing(glowAnim, {
-                    toValue: 1.2,
+                    toValue: 1.05, // Slightly scaled up
                     duration: 1500,
                     useNativeDriver: true,
                 }),
                 Animated.timing(glowAnim, {
-                    toValue: 1,
+                    toValue: 1, // Back to normal
                     duration: 1500,
                     useNativeDriver: true,
                 }),
@@ -51,12 +52,14 @@ export default function WelcomeScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
+            <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
             <ImageBackground
-                source={require('../assets/images/sports_welcome.png')}
+                source={require('../assets/images/WelcomePage.jpg')}
                 style={styles.backgroundImage}
-                blurRadius={2}
+                resizeMode="cover" // Ensure image covers the screen
             >
                 <LinearGradient
+                    // Modern Blue-Purple Gradient Overlay
                     colors={['rgba(102, 126, 234, 0.8)', 'rgba(118, 75, 162, 0.9)']}
                     style={styles.overlay}
                 >
@@ -69,11 +72,13 @@ export default function WelcomeScreen({ navigation }) {
                             },
                         ]}
                     >
+                        {/* Top Section: Logo & Brand */}
                         <View style={styles.logoContainer}>
-                            <Text style={styles.logo}>💪</Text>
+                            {/* Placeholder for Logo Icon - You can add an Image or Icon here */}
                             <Text style={styles.brandName}>FitLeague</Text>
                         </View>
 
+                        {/* Middle Section: Tagline & Subtitle */}
                         <Animated.View
                             style={[
                                 styles.taglineContainer,
@@ -86,39 +91,29 @@ export default function WelcomeScreen({ navigation }) {
                             </Text>
                         </Animated.View>
 
+                        {/* Bottom Section: Action Button */}
                         <TouchableOpacity
                             style={styles.button}
                             onPress={() => navigation.navigate('AvatarSetup')}
                             activeOpacity={0.8}
                         >
                             <LinearGradient
+                                // Vibrant Green Gradient for CTA
                                 colors={['#4ade80', '#22c55e']}
                                 style={styles.buttonGradient}
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 1, y: 0 }}
                             >
-                                <Text style={styles.buttonText}>Get Started</Text>
+                                <Text style={styles.buttonText}>GET STARTED</Text>
                             </LinearGradient>
                         </TouchableOpacity>
 
-                        <View style={styles.featuresList}>
-                            <FeatureItem icon="🏆" text="Compete with friends" />
-                            <FeatureItem icon="📊" text="Track your progress" />
-                            <FeatureItem icon="⚡" text="Earn XP & rewards" />
-                        </View>
                     </Animated.View>
                 </LinearGradient>
             </ImageBackground>
         </View>
     );
 }
-
-const FeatureItem = ({ icon, text }) => (
-    <View style={styles.featureItem}>
-        <Text style={styles.featureIcon}>{icon}</Text>
-        <Text style={styles.featureText}>{text}</Text>
-    </View>
-);
 
 const styles = StyleSheet.create({
     container: {
@@ -131,62 +126,69 @@ const styles = StyleSheet.create({
     },
     overlay: {
         flex: 1,
-        justifyContent: 'space-between',
+        justifyContent: 'center', // Center content vertically
     },
     content: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'space-around',
+        justifyContent: 'space-between', // Distribute space evenly
         paddingHorizontal: 30,
-        paddingVertical: 60,
+        paddingVertical: 80, // More breathing room
     },
     logoContainer: {
         alignItems: 'center',
+        marginTop: 40,
     },
     logo: {
         fontSize: 80,
         marginBottom: 10,
+        // Removed textShadow for emoji, add back if using text
     },
     brandName: {
-        fontSize: 48,
-        fontWeight: 'bold',
+        fontSize: 52, // Slightly larger
+        fontWeight: '900', // Extra bold
         color: '#ffffff',
-        letterSpacing: 2,
-        textShadowColor: 'rgba(0, 0, 0, 0.5)',
-        textShadowOffset: { width: 0, height: 3 },
-        textShadowRadius: 6,
+        letterSpacing: 3,
+        textShadowColor: 'rgba(0, 0, 0, 0.3)',
+        textShadowOffset: { width: 0, height: 4 },
+        textShadowRadius: 10,
+        fontFamily: 'System', // Use system font or custom font
     },
     taglineContainer: {
         alignItems: 'center',
         marginVertical: 20,
     },
     tagline: {
-        fontSize: 32,
-        fontWeight: 'bold',
+        fontSize: 36, // Larger impact
+        fontWeight: '800',
         color: '#ffffff',
         textAlign: 'center',
-        marginBottom: 10,
-        textShadowColor: 'rgba(255, 255, 255, 0.5)',
+        marginBottom: 15,
+        textShadowColor: 'rgba(255, 255, 255, 0.3)',
         textShadowOffset: { width: 0, height: 0 },
-        textShadowRadius: 20,
+        textShadowRadius: 15,
     },
     subtitle: {
         fontSize: 18,
         color: '#e0e0e0',
         textAlign: 'center',
+        fontWeight: '500',
+        paddingHorizontal: 20,
+        lineHeight: 24, // Better readability
     },
     button: {
-        width: width * 0.7,
+        width: width * 0.8, // Slightly wider button
         borderRadius: 30,
         overflow: 'hidden',
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
-        elevation: 8,
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.35,
+        shadowRadius: 10,
+        elevation: 10,
+        marginBottom: 40,
     },
     buttonGradient: {
-        paddingVertical: 18,
+        paddingVertical: 20,
         paddingHorizontal: 40,
         alignItems: 'center',
     },
@@ -194,29 +196,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: '#ffffff',
-        letterSpacing: 1,
-    },
-    featuresList: {
-        width: '100%',
-        gap: 12,
-    },
-    featureItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.15)',
-        paddingVertical: 12,
-        paddingHorizontal: 20,
-        borderRadius: 15,
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.2)',
-    },
-    featureIcon: {
-        fontSize: 24,
-        marginRight: 15,
-    },
-    featureText: {
-        fontSize: 16,
-        color: '#ffffff',
-        fontWeight: '600',
+        letterSpacing: 2, // More spacing for "GET STARTED"
+        textTransform: 'uppercase',
     },
 });

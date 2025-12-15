@@ -72,14 +72,13 @@ function RootNavigator() {
 
   return (
     <Stack.Navigator
+      initialRouteName={showMainApp ? 'MainApp' : 'Onboarding'}
       screenOptions={{
         headerShown: false,
         presentation: 'card',
       }}
     >
-      {!showMainApp ? (
-        <Stack.Screen name="Onboarding" component={OnboardingStack} />
-      ) : null}
+      <Stack.Screen name="Onboarding" component={OnboardingStack} />
       <Stack.Screen name="MainApp" component={MainTabs} />
     </Stack.Navigator>
   );
